@@ -11,7 +11,7 @@ struct MacVolumeControlApp: App {
     }
 }
 
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     var statusItem: NSStatusItem?
     var popover: NSPopover?
     var volumeController: MacVolumeController?
@@ -37,6 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         popover = NSPopover()
         popover?.contentSize = NSSize(width: 600, height: 400)
         popover?.behavior = .transient
+        popover?.delegate = self
         popover?.contentViewController = NSHostingController(rootView: ContentView(
             blePeripheral: blePeripheral!,
             volumeController: volumeController!
@@ -55,5 +56,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationWillTerminate(_ notification: Notification) {
         blePeripheral?.stopAdvertising()
+    }
+
+    // MARK: - NSPopoverDelegate
+
+    func popoverShouldDetach(_ popover: NSPopover) -> Bool {
+        return false
+    }
+
+    func popoverDidClose(_ notification: Notification) {
+        // Popover closed
     }
 }
