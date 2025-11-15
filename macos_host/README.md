@@ -19,15 +19,89 @@ This is the macOS host application that runs as a menu bar app and provides BLE 
 
 ## Building the Application
 
-1. Open the Xcode project:
+### 開発中の実行（Xcode経由）
+
+1. Xcodeプロジェクトを開く:
    ```bash
    cd macos_host/MacVolumeControl
    open MacVolumeControl.xcodeproj
    ```
 
-2. Select the "MacVolumeControl" scheme and your Mac as the target device
+2. "MacVolumeControl" スキームとMacをターゲットデバイスとして選択
 
-3. Build and run the application (⌘R)
+3. アプリケーションをビルドして実行 (⌘R)
+
+### スタンドアローンアプリとしてビルド
+
+Xcode外でも動作する独立したアプリケーションをビルドする方法：
+
+#### 方法1: Xcodeでアーカイブしてエクスポート（推奨）
+
+1. Xcodeでプロジェクトを開く
+
+2. メニューバーから `Product` > `Archive` を選択
+
+3. アーカイブが完了したら、Organizerウィンドウが開く
+
+4. `Distribute App` をクリック
+
+5. 配布方法を選択:
+   - **Copy App**: 自分のMacだけで使う場合（最も簡単）
+   - **Developer ID**: 他のMacでも実行できるように署名する場合（Apple Developer Program必要）
+
+6. エクスポートされた `.app` ファイルを `アプリケーション` フォルダにコピー
+
+7. Finderからアプリをダブルクリックして起動
+
+#### 方法2: コマンドラインでビルド
+
+```bash
+# プロジェクトディレクトリに移動
+cd macos_host/MacVolumeControl
+
+# Releaseビルドを作成
+xcodebuild -project MacVolumeControl.xcodeproj \
+  -scheme MacVolumeControl \
+  -configuration Release \
+  -derivedDataPath ./build
+
+# ビルドされたアプリの場所
+# ./build/Build/Products/Release/MacVolumeControl.app
+
+# アプリケーションフォルダにコピー（任意）
+cp -r ./build/Build/Products/Release/MacVolumeControl.app ~/Applications/
+```
+
+#### アプリの起動方法
+
+**アプリケーションフォルダから起動:**
+```bash
+open ~/Applications/MacVolumeControl.app
+```
+
+または、Finderで `MacVolumeControl.app` をダブルクリック
+
+**ログイン時に自動起動（任意）:**
+1. `システム設定` > `一般` > `ログイン項目` を開く
+2. `+` ボタンをクリック
+3. `MacVolumeControl.app` を選択
+4. 追加
+
+**メニューバーに常駐:**
+アプリを起動すると、メニューバーにスピーカーアイコンが表示されます。Dockには表示されません（LSUIElement設定により）。
+
+### 開発者署名なしで実行する場合
+
+初回起動時に「開発元を確認できないため開けません」というエラーが出る場合:
+
+1. `システム設定` > `プライバシーとセキュリティ` を開く
+2. 「このまま開く」ボタンをクリック
+
+または:
+```bash
+# 署名の検証を解除（自己責任で）
+xattr -cr ~/Applications/MacVolumeControl.app
+```
 
 ## Permissions
 

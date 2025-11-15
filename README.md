@@ -112,6 +112,8 @@ flutter run -d ios
 
 ### macOSホストアプリのセットアップ
 
+#### 開発中の実行（Xcode経由）
+
 1. Xcodeでプロジェクトを開く
 ```bash
 cd macos_host/MacVolumeControl
@@ -121,6 +123,33 @@ open MacVolumeControl.xcodeproj
 2. プロジェクトをビルドして実行
    - Xcodeで `Product > Run` を選択
    - メニューバーにアイコンが表示されます
+
+#### スタンドアローンアプリとしてビルド（Xcode不要で動作）
+
+**方法1: Xcodeでアーカイブ（推奨）**
+
+1. Xcodeで `Product > Archive` を選択
+2. `Distribute App` > `Copy App` を選択
+3. エクスポートされた `.app` ファイルを `アプリケーション` フォルダにコピー
+4. Finderからアプリをダブルクリックして起動
+
+**方法2: コマンドラインでビルド**
+
+```bash
+cd macos_host/MacVolumeControl
+xcodebuild -project MacVolumeControl.xcodeproj \
+  -scheme MacVolumeControl \
+  -configuration Release \
+  -derivedDataPath ./build
+
+# ビルドされたアプリをコピー
+cp -r ./build/Build/Products/Release/MacVolumeControl.app ~/Applications/
+```
+
+**ログイン時に自動起動（任意）:**
+- `システム設定` > `一般` > `ログイン項目` から `MacVolumeControl.app` を追加
+
+詳細は [macOSホストアプリのREADME](macos_host/README.md) を参照してください。
 
 ## 使い方
 
