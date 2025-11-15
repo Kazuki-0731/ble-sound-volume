@@ -16,6 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     var popover: NSPopover?
     var volumeController: MacVolumeController?
     var blePeripheral: VolumeControlPeripheral?
+    var eventMonitor: Any?
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Initialize volume controller
@@ -47,10 +48,33 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     @objc func togglePopover() {
         if let button = statusItem?.button {
             if popover?.isShown == true {
-                popover?.performClose(nil)
+                closePopover()
             } else {
-                popover?.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+                showPopover()
             }
+        }
+    }
+
+    func showPopover() {
+        if let button = statusItem?.button {
+            popover?.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+
+            // Start monitoring for clicks outside the popover
+            eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] event in
+                if let popover = self?.popover, popover.isShown {
+                    self?.closePopover()
+                }
+            }
+        }
+    }
+
+    func closePopover() {
+        popover?.performClose(nil)
+
+        // Stop monitoring events
+        if let monitor = eventMonitor {
+            NSEvent.removeMonitor(monitor)
+            eventMonitor = nil
         }
     }
     
@@ -65,6 +89,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     }
 
     func popoverDidClose(_ notification: Notification) {
-        // Popover closed
+        // Clean up event monitor when popover closes
+        if let monitor = eventMonitor {
+            NSEvent.removeMonitor(monitor)
+            eventMonitor = nil
+        }
     }
 }
