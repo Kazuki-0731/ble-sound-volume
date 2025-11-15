@@ -2,8 +2,8 @@ import Foundation
 import CoreAudio
 
 class MacVolumeController {
-    private var volumeChangeCallback: ((Float) -> Void)?
-    private var muteChangeCallback: ((Bool) -> Void)?
+    fileprivate var volumeChangeCallback: ((Float) -> Void)?
+    fileprivate var muteChangeCallback: ((Bool) -> Void)?
     private var defaultOutputDeviceID: AudioDeviceID = 0
     
     init() {
@@ -24,7 +24,7 @@ class MacVolumeController {
         var volumeSize = UInt32(MemoryLayout<Float32>.size)
         
         var address = AudioObjectPropertyAddress(
-            mSelector: kAudioHardwareServiceDeviceProperty_VirtualMainVolume,
+            mSelector: kAudioDevicePropertyVolumeScalar,
             mScope: kAudioDevicePropertyScopeOutput,
             mElement: kAudioObjectPropertyElementMain
         )
@@ -52,7 +52,7 @@ class MacVolumeController {
         var volumeValue = clampedVolume
         
         var address = AudioObjectPropertyAddress(
-            mSelector: kAudioHardwareServiceDeviceProperty_VirtualMainVolume,
+            mSelector: kAudioDevicePropertyVolumeScalar,
             mScope: kAudioDevicePropertyScopeOutput,
             mElement: kAudioObjectPropertyElementMain
         )
@@ -159,7 +159,7 @@ class MacVolumeController {
     
     private func setupVolumeListener() {
         var address = AudioObjectPropertyAddress(
-            mSelector: kAudioHardwareServiceDeviceProperty_VirtualMainVolume,
+            mSelector: kAudioDevicePropertyVolumeScalar,
             mScope: kAudioDevicePropertyScopeOutput,
             mElement: kAudioObjectPropertyElementMain
         )
@@ -193,7 +193,7 @@ class MacVolumeController {
     
     private func removeVolumeListener() {
         var address = AudioObjectPropertyAddress(
-            mSelector: kAudioHardwareServiceDeviceProperty_VirtualMainVolume,
+            mSelector: kAudioDevicePropertyVolumeScalar,
             mScope: kAudioDevicePropertyScopeOutput,
             mElement: kAudioObjectPropertyElementMain
         )
