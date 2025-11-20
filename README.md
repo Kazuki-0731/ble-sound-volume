@@ -1,5 +1,13 @@
 # BLE Sound Volume
 
+[![Flutter](https://img.shields.io/badge/Flutter-3.0+-02569B?style=flat&logo=flutter)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.0+-0175C2?style=flat&logo=dart)](https://dart.dev)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-4CAF50?style=flat)](https://flutter.dev)
+[![macOS](https://img.shields.io/badge/macOS-13.0+-9B59B6?style=flat&logo=apple)](https://www.apple.com/macos)
+[![Swift](https://img.shields.io/badge/Swift-5.0+-FA7343?style=flat&logo=swift)](https://swift.org)
+[![License](https://img.shields.io/badge/License-MIT-yellow?style=flat)](LICENSE)
+[![BLE](https://img.shields.io/badge/BLE-4.0+-1E90FF?style=flat&logo=bluetooth)](https://www.bluetooth.com)
+
 Bluetooth Low Energy (BLE)通信を使用してmacOSの音量を遠隔操作するFlutterアプリケーションです。
 
 ## 概要
