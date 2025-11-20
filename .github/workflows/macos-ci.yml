@@ -1,0 +1,43 @@
+name: macOS Host App CI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'macos_host/**'
+      - '.github/workflows/macos-ci.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'macos_host/**'
+      - '.github/workflows/macos-ci.yml'
+
+jobs:
+  build:
+    name: Build macOS Host App
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_15.0.app/Contents/Developer
+
+    - name: Show Xcode version
+      run: xcodebuild -version
+
+    - name: Build macOS app
+      run: |
+        cd macos_host/MacVolumeControl
+        xcodebuild -project MacVolumeControl.xcodeproj \
+          -scheme MacVolumeControl \
+          -configuration Release \
+          -derivedDataPath build \
+          clean build
+
+    - name: Archive build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: macos-app
+        path: macos_host/MacVolumeControl/build/Build/Products/Release/MacVolumeControl.app
+        if-no-files-found: error
