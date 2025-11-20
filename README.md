@@ -8,25 +8,27 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat)](LICENSE)
 [![BLE](https://img.shields.io/badge/BLE-4.0+-1E90FF?style=flat&logo=bluetooth)](https://www.bluetooth.com)
 
-Bluetooth Low Energy (BLE)通信を使用してmacOSの音量を遠隔操作するFlutterアプリケーションです。
+A Flutter application for remotely controlling macOS volume via Bluetooth Low Energy (BLE) communication.
 
-## 概要
+**[日本語版 README はこちら](README.ja.md)**
 
-このシステムは、Android/iOSモバイルアプリケーションからBLE通信を使用してmacBookのシステム音量をリアルタイムで制御できます。ユーザーはモバイルデバイス上のスライダーやボタンを使用して、接続されたmacBookの音量を直感的に調整できます。
+## Overview
 
-## 主な機能
+This system allows you to control macBook's system volume in real-time from Android/iOS mobile applications using BLE communication. Users can intuitively adjust the volume of their connected macBook using sliders and buttons on their mobile devices.
 
-- 🔍 **デバイススキャン**: Bluetooth範囲内のmacOSデバイスを検索・発見
-- 🔗 **BLE接続**: 発見したデバイスへの接続と自動再接続
-- 🎚️ **音量制御**: スライダーを使用した直感的な音量調整（0-100%）
-- 🔇 **ミュート機能**: ワンタップでミュート/ミュート解除
-- 📊 **リアルタイム同期**: macOS側の音量変更をモバイルアプリに自動反映
-- 📳 **ハプティックフィードバック**: 音量調整時の触覚フィードバック
-- 🔄 **自動再接続**: 接続切断時の自動再接続（最大3回、5秒間隔）
+## Key Features
 
-## アーキテクチャ
+- 🔍 **Device Scanning**: Discover and search for macOS devices within Bluetooth range
+- 🔗 **BLE Connection**: Connect to discovered devices with automatic reconnection
+- 🎚️ **Volume Control**: Intuitive volume adjustment using a slider (0-100%)
+- 🔇 **Mute Function**: One-tap mute/unmute
+- 📊 **Real-time Sync**: Automatically reflect macOS volume changes in the mobile app
+- 📳 **Haptic Feedback**: Tactile feedback during volume adjustment
+- 🔄 **Auto Reconnection**: Automatic reconnection on disconnect (up to 3 times, 5-second intervals)
 
-### システム構成
+## Architecture
+
+### System Configuration
 
 ```
 ┌─────────────────────────────┐         ┌─────────────────────────────┐
@@ -51,65 +53,65 @@ Bluetooth Low Energy (BLE)通信を使用してmacOSの音量を遠隔操作す�
 └─────────────────────────────┘         └─────────────────────────────┘
 ```
 
-### BLE GATT プロファイル
+### BLE GATT Profile
 
-**サービスUUID**: `12345678-1234-1234-1234-123456789ABC`
+**Service UUID**: `12345678-1234-1234-1234-123456789ABC`
 
-**キャラクタリスティック**:
-- **音量レベル** (`12345678-1234-1234-1234-123456789ABD`)
+**Characteristics**:
+- **Volume Level** (`12345678-1234-1234-1234-123456789ABD`)
   - Type: UInt8 (0-100)
   - Properties: Read, Write, Notify
 
-- **ミュート状態** (`12345678-1234-1234-1234-123456789ABE`)
+- **Mute State** (`12345678-1234-1234-1234-123456789ABE`)
   - Type: UInt8 (0=unmuted, 1=muted)
   - Properties: Read, Write, Notify
 
-## 技術スタック
+## Tech Stack
 
-### モバイルアプリ (Flutter)
+### Mobile App (Flutter)
 
-- **Flutter** - クロスプラットフォームUIフレームワーク
-- **flutter_blue_plus** (^1.32.0) - BLE通信
-- **flutter_bloc** (^8.1.0) - 状態管理
-- **equatable** (^2.0.0) - 値の比較
-- **permission_handler** (^11.0.0) - 権限管理
+- **Flutter** - Cross-platform UI framework
+- **flutter_blue_plus** (^1.32.0) - BLE communication
+- **flutter_bloc** (^8.1.0) - State management
+- **equatable** (^2.0.0) - Value comparison
+- **permission_handler** (^11.0.0) - Permission management
 
-### macOSホスト (Swift)
+### macOS Host (Swift)
 
-- **CoreBluetooth** - BLE実装
-- **CoreAudio** - システム音量制御
-- **SwiftUI** - メニューバーアプリUI
+- **CoreBluetooth** - BLE implementation
+- **CoreAudio** - System volume control
+- **SwiftUI** - Menu bar app UI
 
-## セットアップ
+## Setup
 
-### 前提条件
+### Prerequisites
 
-- Flutter SDK 3.0以上
-- Xcode 15.0以上（macOSアプリのビルド用）
+- Flutter SDK 3.0 or higher
+- Xcode 15.0 or higher (for building macOS app)
 - Android Studio / VS Code
-- macOS 13.0以上（ホストアプリ実行用）
+- macOS 13.0 or higher (for running host app)
 
-### モバイルアプリのセットアップ
+### Mobile App Setup
 
-1. リポジトリをクローン
+1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/ble-sound-volume.git
+git clone https://github.com/Kazuki-0731/ble-sound-volume.git
 cd ble-sound-volume
 ```
 
-2. 依存関係をインストール
+2. Install dependencies
 ```bash
 flutter pub get
 ```
 
-3. iOS用のCocoaPodsをインストール
+3. Install CocoaPods for iOS
 ```bash
 cd ios
 pod install
 cd ..
 ```
 
-4. アプリを実行
+4. Run the app
 ```bash
 # Android
 flutter run
@@ -118,30 +120,30 @@ flutter run
 flutter run -d ios
 ```
 
-### macOSホストアプリのセットアップ
+### macOS Host App Setup
 
-#### 開発中の実行（Xcode経由）
+#### Running in Development (via Xcode)
 
-1. Xcodeでプロジェクトを開く
+1. Open the project in Xcode
 ```bash
 cd macos_host/MacVolumeControl
 open MacVolumeControl.xcodeproj
 ```
 
-2. プロジェクトをビルドして実行
-   - Xcodeで `Product > Run` を選択
-   - メニューバーにアイコンが表示されます
+2. Build and run the project
+   - Select `Product > Run` in Xcode
+   - The icon will appear in the menu bar
 
-#### スタンドアローンアプリとしてビルド（Xcode不要で動作）
+#### Building as Standalone App (Runs without Xcode)
 
-**方法1: Xcodeでアーカイブ（推奨）**
+**Method 1: Archive with Xcode (Recommended)**
 
-1. Xcodeで `Product > Archive` を選択
-2. `Distribute App` > `Copy App` を選択
-3. エクスポートされた `.app` ファイルを `アプリケーション` フォルダにコピー
-4. Finderからアプリをダブルクリックして起動
+1. Select `Product > Archive` in Xcode
+2. Select `Distribute App` > `Copy App`
+3. Copy the exported `.app` file to the Applications folder
+4. Double-click the app in Finder to launch
 
-**方法2: コマンドラインでビルド**
+**Method 2: Build via Command Line**
 
 ```bash
 cd macos_host/MacVolumeControl
@@ -150,113 +152,115 @@ xcodebuild -project MacVolumeControl.xcodeproj \
   -configuration Release \
   -derivedDataPath ./build
 
-# ビルドされたアプリをコピー
+# Copy the built app
 cp -r ./build/Build/Products/Release/MacVolumeControl.app ~/Applications/
 ```
 
-**ログイン時に自動起動（任意）:**
-- `システム設定` > `一般` > `ログイン項目` から `MacVolumeControl.app` を追加
+**Auto-start on Login (Optional):**
+- Add `MacVolumeControl.app` from `System Settings` > `General` > `Login Items`
 
-詳細は [macOSホストアプリのREADME](macos_host/README.md) を参照してください。
+For more details, see [macOS Host App README](macos_host/README.md).
 
-## 使い方
+## Usage
 
-### 1. macOSホストアプリを起動
+### 1. Launch macOS Host App
 
-macOSデバイスでMacVolumeControlアプリを起動します。メニューバーにアイコンが表示され、BLEサービスのアドバタイジングが開始されます。
+Launch the MacVolumeControl app on your macOS device. An icon will appear in the menu bar and BLE service advertising will begin.
 
-### 2. モバイルアプリでデバイスをスキャン
+### 2. Scan for Devices with Mobile App
 
-1. モバイルアプリを起動
-2. 「デバイスをスキャン」ボタンをタップ
-3. Bluetooth権限を許可
-4. 発見されたデバイスリストからmacOSデバイスを選択
+1. Launch the mobile app
+2. Tap the "Scan for Devices" button
+3. Grant Bluetooth permissions
+4. Select your macOS device from the discovered devices list
 
-### 3. 音量を制御
+### 3. Control Volume
 
-- **スライダー**: ドラッグして音量を調整（0-100%）
-- **ミュートボタン**: タップしてミュート/ミュート解除
-- **接続状態**: 画面上部に接続状態が表示されます
+- **Slider**: Drag to adjust volume (0-100%)
+- **Mute Button**: Tap to mute/unmute
+- **Connection Status**: Connection status is displayed at the top of the screen
 
-### 4. 切断
+### 4. Disconnect
 
-「切断」ボタンをタップするか、アプリを終了すると接続が切断されます。
+Tap the "Disconnect" button or close the app to disconnect.
 
-## テスト
+## Testing
 
-### ユニットテストの実行
+### Running Unit Tests
 
 ```bash
 flutter test
 ```
 
-### テストカバレッジ
+### Test Coverage
 
-- BLoC状態遷移テスト
-- デバウンス処理テスト
-- エラーハンドリングテスト
-- UI ウィジェットテスト
+- BLoC state transition tests
+- Debounce processing tests
+- Error handling tests
+- UI widget tests
 
-## エラーハンドリング
+## Error Handling
 
-### モバイルアプリ
+### Mobile App
 
-- **Bluetooth無効**: 設定画面へのナビゲーションを提供
-- **接続失敗**: 3回まで自動リトライ（5秒間隔）
-- **通信タイムアウト**: 書き込み3秒、読み取り2秒
-- **無効な音量値**: 0-100の範囲にクランプ
+- **Bluetooth Disabled**: Provides navigation to settings screen
+- **Connection Failed**: Automatic retry up to 3 times (5-second intervals)
+- **Communication Timeout**: Write 3 seconds, Read 2 seconds
+- **Invalid Volume Value**: Clamped to 0-100 range
 
-### macOSホスト
+### macOS Host
 
-- **Bluetooth権限なし**: 権限リクエストダイアログを表示
-- **無効なコマンド**: 範囲チェックとログ記録
-- **Audio Systemエラー**: エラーをキャッチして前回の正常値を保持
+- **No Bluetooth Permission**: Displays permission request dialog
+- **Invalid Command**: Range check and logging
+- **Audio System Error**: Catches errors and retains previous valid value
 
-## パフォーマンス最適化
+## Performance Optimization
 
-- **デバウンス処理**: スライダー操作時に100msのデバウンスでBLE通信を削減
-- **通知の最適化**: 音量が実際に変更された場合のみ通知を送信
-- **低消費電力**: BLE 4.0+の省電力機能を活用
+- **Debounce Processing**: 100ms debounce during slider operation to reduce BLE communication
+- **Notification Optimization**: Send notifications only when volume actually changes
+- **Low Power Consumption**: Utilizes BLE 4.0+ power-saving features
 
-## セキュリティ
+## Security
 
-- BLE接続時のペアリング（Just Works方式）
-- 同時接続数を1デバイスに制限
-- 受信データの範囲バリデーション
-- Bluetooth権限の適切な管理
+- BLE connection pairing (Just Works method)
+- Limit concurrent connections to 1 device
+- Received data range validation
+- Proper Bluetooth permission management
 
-## プロジェクト構造
+## Project Structure
 
 ```
 ble-sound-volume/
 ├── lib/
-│   ├── bloc/              # BLoC状態管理
-│   ├── models/            # データモデル
-│   ├── repositories/      # BLEリポジトリ
-│   ├── screens/           # UI画面
+│   ├── bloc/              # BLoC state management
+│   ├── models/            # Data models
+│   ├── repositories/      # BLE repository
+│   ├── screens/           # UI screens
 │   └── main.dart
 ├── macos_host/
-│   └── MacVolumeControl/  # macOSホストアプリ
-├── test/                  # テストコード
+│   └── MacVolumeControl/  # macOS host app
+├── test/                  # Test code
 └── .kiro/
-    └── specs/             # 仕様書・設計書
+    └── specs/             # Specifications and design docs
 ```
 
-## ライセンス
+## License
 
 MIT License
 
-## 貢献
+## Contributing
 
-プルリクエストを歓迎します。大きな変更の場合は、まずissueを開いて変更内容を議論してください。
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
-## 関連ドキュメント
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
-- [要件定義書](.kiro/specs/mac-volume-control/requirements.md)
-- [設計書](.kiro/specs/mac-volume-control/design.md)
-- [実装タスク](.kiro/specs/mac-volume-control/tasks.md)
-- [macOSホスト実装ノート](macos_host/IMPLEMENTATION_NOTES.md)
+## Related Documentation
 
-## お問い合わせ
+- [Requirements Document](.kiro/specs/mac-volume-control/requirements.md)
+- [Design Document](.kiro/specs/mac-volume-control/design.md)
+- [Implementation Tasks](.kiro/specs/mac-volume-control/tasks.md)
+- [macOS Host Implementation Notes](macos_host/IMPLEMENTATION_NOTES.md)
 
-問題や質問がある場合は、GitHubのIssuesページでお知らせください。
+## Contact
+
+If you have any issues or questions, please let us know on the GitHub Issues page.
